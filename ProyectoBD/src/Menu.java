@@ -71,14 +71,16 @@ public class Menu {
 			case 6:
 				bw.write("VA A AGREGAR UN PROYECTO "+"\n");
 				bw.flush();
-
 				String proj[]= new String[5];
 				proj=proyectoNuevo();
 				Proyectos pro = new Proyectos(proj[0],proj[1],proj[2],proj[3],proj[4]);
 				que.enqueue(pro);
 					break;
 			case 7:
+				bw.write("VA A CALIFICAR PROYECTO "+"\n");
+				bw.flush();
 				bw.write(que.dequeue().toString());
+				String cal = br.readLine();
 				break;
 			case 8:
 				que.doNotPrint();
@@ -113,27 +115,42 @@ public class Menu {
 		return datos;
 	}
 	public static String[] proyectoNuevo()  throws IOException
-	{	int variable;
-		boolean op = true;
-		String temp="";
+	{	
+		boolean proj = true;
 		String datos[]= new String[5];
-		bw.write(" INGRESE LOS DATOS A CONTINUACION: "+"\n");
-		bw.write("Id: "+"\n");
-		bw.flush();
-		datos[0] =br.readLine();
-		bw.write("Nombre Proyecto: "+"\n");
-		bw.flush();
-		datos[1] =br.readLine();
-		bw.write("Descripcion: "+"\n");
-		bw.flush();
-		datos[2] =br.readLine();
-		bw.write("Calificacion: "+"\n");
-		bw.flush();
-		datos[3] =br.readLine();
-		bw.write("Observaciones: "+"\n");
-		bw.flush();
-		datos[4] =br.readLine();
-			
+		while (proj){
+			Estudiante temp = head.getNext();
+			bw.write(" INGRESE LOS DATOS A CONTINUACION: "+"\n");
+			bw.write("Id: "+"\n");
+			bw.flush();
+			String id= br.readLine();
+			for (int j =0 ;j<getSize();j++)
+			{
+				bw.write("ID COMPARE: "+temp.getId());
+
+				if(id.equals(temp.getId()))
+				{
+					datos[0] = id;
+					bw.write("Nombre Proyecto: "+"\n");
+					bw.flush();
+					datos[1] =br.readLine();
+					bw.write("Descripcion: "+"\n");
+					bw.flush();
+					datos[2] =br.readLine();
+					bw.write("Calificacion: "+"\n");
+					bw.flush();
+					datos[3] =br.readLine();
+					bw.write("Observaciones: "+"\n");
+					bw.flush();
+					datos[4] =br.readLine();
+					proj = false;
+					break;
+				}else
+				{
+					temp=temp.getNext();
+				}
+			}
+		}
 		return datos;
 	}
 	public static String semestre() throws IOException

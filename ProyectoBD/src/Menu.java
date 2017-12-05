@@ -16,8 +16,8 @@ public class Menu {
 		iniciar2();
 
 		while (opcW!=0){
-
-			bw.write("Base de datos "+"\n");
+			bw.write("------------------------------------------------- "+"\n");
+			bw.write("BASE DE DATOS "+"\n");
 			bw.write("Opciones "+"\n");
 			bw.write("1. Listar Estudiantes"+"\n");
 			bw.write("11. Listar Arbol"+"\n");
@@ -29,6 +29,7 @@ public class Menu {
 			bw.write("7. Evaluar Proyecto "+"\n");
 			bw.write("8. Listar Proyecto "+"\n");
 			bw.write("0. Salir "+"\n");
+			bw.write("------------------------------------------------- "+"\n");
 			bw.flush();
 			int opc = Integer.parseInt(br.readLine());
 			switch (opc)
@@ -78,9 +79,9 @@ public class Menu {
 				que.enqueue(pro);
 					break;
 			case 7:
+				bw.write(que.dequeue().toString());
 				bw.write("VA A CALIFICAR PROYECTO "+"\n");
 				bw.flush();
-				bw.write(que.dequeue().toString());
 				String cal = br.readLine();
 				break;
 			case 8:
@@ -127,7 +128,7 @@ public class Menu {
 			String id= br.readLine();
 			for (int j =0 ;j<getSize();j++)
 			{
-				bw.write("ID COMPARE: "+temp.getId());
+				bw.write("Estudiante comparado ->"+temp.getNombre()+" ID: " + temp.getId()+"\n");
 
 				if(id.equals(temp.getId()))
 				{
@@ -513,7 +514,7 @@ public class Menu {
 	{
 
 			Estudiante temp = head;
-			for(int j=0;j<=getSize();j++)
+			for(int j=0;j<getSize();j++)
 			{
 				String comparar= temp.next.getId();
 				if(id.equals(comparar))

@@ -16,6 +16,7 @@ public class Menu {
 		iniciar2();
 
 		while (opcW!=0){
+
 			bw.write("Base de datos "+"\n");
 			bw.write("Opciones "+"\n");
 			bw.write("1. Listar Estudiantes"+"\n");

@@ -13,7 +13,8 @@ public class Menu {
 	public static void main(String[] args) throws IOException
 	{	int opcW=1;
 		iniciar();
-		
+		iniciar2();
+
 		while (opcW!=0){
 			bw.write("Base de datos "+"\n");
 			bw.write("Opciones "+"\n");
@@ -25,6 +26,7 @@ public class Menu {
 			bw.write("5. Buscar "+"\n");
 			bw.write("6. Agregar Proyecto "+"\n");
 			bw.write("7. Evaluar Proyecto "+"\n");
+			bw.write("8. Listar Proyecto "+"\n");
 			bw.write("0. Salir "+"\n");
 			bw.flush();
 			int opc = Integer.parseInt(br.readLine());
@@ -78,7 +80,11 @@ public class Menu {
 			case 7:
 				bw.write(que.dequeue().toString());
 				break;
+			case 8:
+				que.doNotPrint();
+				break;
 			case 0:
+				terminar2();
 				opcW=terminar();
 				break;
 			default:
@@ -279,6 +285,7 @@ public class Menu {
 	{
 		BufferedReader br= null;
 		File archivo = null;
+		File archivo2 = null;
 	    FileReader fr = null;
 
 	      try {
@@ -291,18 +298,36 @@ public class Menu {
 	        	 String datos [] = linea.split(",");
 	        	 Estudiante nodo = new Estudiante(datos[0],datos[1],datos[2],datos[3],datos[4],datos[5]);
 	        	 addNodeAtEnd(nodo);
+	         }     		
+	      }
+	      catch(Exception e){
+	         e.printStackTrace();
+	      }finally{
+	         try{                    
+	            if( null != fr ){   
+	               fr.close();     
+	            }                  
+	         }catch (Exception e2){ 
+	            e2.printStackTrace();
 	         }
+	      }
+	}
+	public static void iniciar2()
+	{
+		BufferedReader br= null;
+		File archivo = null;
+	    FileReader fr = null;
+	      try {
 	         archivo = new File ("d:/Proyectos.txt");
 	         fr = new FileReader (archivo);
 	         br = new BufferedReader(fr);
-	         String linea1;
-	         while((linea1=br.readLine())!=null)
+	         String linea;
+	         while((linea=br.readLine())!=null)
 	         {
 	        	 String datos [] = linea.split(",");
 	        	 Proyectos st = new Proyectos(datos[0],datos[1],datos[2],datos[3],datos[4]);
 	        	 que.enqueue(st);
 	         }
-	     		
 	      }
 	      catch(Exception e){
 	         e.printStackTrace();
@@ -319,34 +344,21 @@ public class Menu {
 	public static int  terminar()
 	{
 		FileWriter fichero = null;
+		FileWriter fichero2 = null;
         PrintWriter pw = null;
+        PrintWriter pw2 = null;
+
         try
         {
             fichero = new FileWriter("d:/BD.txt");
             pw = new PrintWriter(fichero);
-        	System.out.println("tama;o "+ getSize());
     		Estudiante temp = head;
 			while(temp.getNext()!=null)
 			{
 				temp = temp.getNext();
 				pw.println(temp.getId()+","+temp.getNombre()+","+temp.getCedula()+","+temp.getCarrera()+
 						","+temp.getJornada()+","+temp.getSemestre());
-			}
-        			
-			fichero = new FileWriter("d:/Proyectos.txt");
-            pw = new PrintWriter(fichero);
-            if (que == null)
-			{
-			
-			}else
-			{
-				Proyectos temp2 =front.getNext();
-				while(temp2!=null)
-				{
-					pw.println(temp.toString());
-					temp=temp.getNext();
-				}
-			}
+			}            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -358,6 +370,32 @@ public class Menu {
            }
         }
         return 0;
+	}
+	public static void  terminar2()
+	{
+		FileWriter fichero = null;
+        PrintWriter pw = null;
+
+        try
+        {
+        			
+			fichero = new FileWriter("d:/Proyectos.txt");
+            pw = new PrintWriter(fichero);
+        	String pasar=que.print();
+        	String datos [] = pasar.split("\n");
+            for (int i = 0 ; i < datos.length ; i++)
+        	pw.println(datos[i]);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+           try {
+           if (null != fichero)
+              fichero.close();
+           } catch (Exception e2) {
+              e2.printStackTrace();
+           }
+        }
 	}
 	public static int getSize() 
 	{
@@ -801,7 +839,7 @@ public class Menu {
 		if(opc2==4 || opc2==5 || opc2==6  )
 		{
 			Estudiante temp = head.getNext();
-			Queue que = null;
+			Stack stack = null;
 			int var ;
 			switch(opc2)
 			{

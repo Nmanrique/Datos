@@ -43,5 +43,18 @@ public class Queue {
 		}
 		
 	}
+	public String print()
+	{
+		String cadena="";
+		Proyectos temp=front.getNext();
+		while(temp!=null)
+		{
+			cadena=cadena+(temp.getId()+","+temp.getNombreP()+","+temp.getDescripcion()+","
+					+temp.getCalificacion()+","+temp.getObservaciones()+ "\n");
+			temp= temp.getNext();
+		}
+		return cadena;
+		
+	}
 }
 

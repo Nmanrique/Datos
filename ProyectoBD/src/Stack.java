@@ -34,7 +34,8 @@ public class Stack {
 		Estudiante temp=top.getNext();
 		while(temp!=null)
 		{
-			System.out.println(temp.getId());
+			System.out.println(temp.toString());
+			temp=temp.getNext();
 		}
 		
 	}

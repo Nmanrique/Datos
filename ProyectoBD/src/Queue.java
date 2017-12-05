@@ -1,15 +1,15 @@
 
 public class Queue {
 
-	private Estudiante front;
+	private Proyectos front;
 	public Queue()
 	{
-		front =new Estudiante();
+		front =new Proyectos();
 	}
 	
-	public void enqueue (Estudiante element)
+	public void enqueue (Proyectos element)
 	{
-		Estudiante temp = front;
+		Proyectos temp = front;
 		while(temp.getNext()!=null)
 		{
 			temp = temp.getNext();
@@ -18,9 +18,9 @@ public class Queue {
 		element.setNext(null);
 	}
 	
-	public Estudiante dequeue()
+	public Proyectos dequeue()
 	{
-		Estudiante temp = front.getNext ();
+		Proyectos temp = front.getNext ();
 		front.setNext(front.getNext().getNext());
 		return temp;
 	}
@@ -35,7 +35,7 @@ public class Queue {
 	}
 	public void doNotPrint()
 	{
-		Estudiante temp=front.getNext();
+		Proyectos temp=front.getNext();
 		while(temp!=null)
 		{
 			System.out.println(temp.toString());

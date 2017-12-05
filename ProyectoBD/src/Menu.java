@@ -2,10 +2,13 @@ import java.io.*;
 
 public class Menu {
 	static Queue que = new Queue();
+	static Stack stack = new Stack();
 	static Estudiante head = new Estudiante();
 	static BufferedReader br= new BufferedReader  (new InputStreamReader(System.in));
 	static BufferedWriter bw= new BufferedWriter(new OutputStreamWriter(System.out));
 	static Arbol root = null;
+	static Proyectos front = new Proyectos();
+
 
 	public static void main(String[] args) throws IOException
 	{	int opcW=1;
@@ -20,7 +23,8 @@ public class Menu {
 			bw.write("3. Eliminar "+"\n");
 			bw.write("4. Editar "+"\n");
 			bw.write("5. Buscar "+"\n");
-			bw.write("6. Proyectos "+"\n");
+			bw.write("6. Agregar Proyecto "+"\n");
+			bw.write("7. Evaluar Proyecto "+"\n");
 			bw.write("0. Salir "+"\n");
 			bw.flush();
 			int opc = Integer.parseInt(br.readLine());
@@ -63,34 +67,19 @@ public class Menu {
 				caseCinco();
 				break;
 			case 6:
-				caseCinco();
+				bw.write("VA A AGREGAR UN PROYECTO "+"\n");
+				bw.flush();
+
+				String proj[]= new String[5];
+				proj=proyectoNuevo();
+				Proyectos pro = new Proyectos(proj[0],proj[1],proj[2],proj[3],proj[4]);
+				que.enqueue(pro);
 					break;
+			case 7:
+				bw.write(que.dequeue().toString());
+				break;
 			case 0:
-				FileWriter fichero = null;
-		        PrintWriter pw = null;
-		        try
-		        {
-		            fichero = new FileWriter("d:/BD.txt");
-		            pw = new PrintWriter(fichero);
-		        	 System.out.println("tama;o "+ getSize());
-		            		Estudiante temp = head;
-		        			while(temp.getNext()!=null)
-		        			{
-		        				temp = temp.getNext();
-		        				pw.println(temp.getId()+","+temp.getNombre()+","+temp.getCedula()+","+temp.getCarrera()+
-		        						","+temp.getJornada()+","+temp.getSemestre());
-		        			}
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		        } finally {
-		           try {
-		           if (null != fichero)
-		              fichero.close();
-		           } catch (Exception e2) {
-		              e2.printStackTrace();
-		           }
-		        }
-		        opcW=0;
+				opcW=terminar();
 				break;
 			default:
 				break;
@@ -114,6 +103,30 @@ public class Menu {
 		datos[3] = carrera ();
 		datos[4] = jornada();
 		datos[5]=semestre();
+			
+		return datos;
+	}
+	public static String[] proyectoNuevo()  throws IOException
+	{	int variable;
+		boolean op = true;
+		String temp="";
+		String datos[]= new String[5];
+		bw.write(" INGRESE LOS DATOS A CONTINUACION: "+"\n");
+		bw.write("Id: "+"\n");
+		bw.flush();
+		datos[0] =br.readLine();
+		bw.write("Nombre Proyecto: "+"\n");
+		bw.flush();
+		datos[1] =br.readLine();
+		bw.write("Descripcion: "+"\n");
+		bw.flush();
+		datos[2] =br.readLine();
+		bw.write("Calificacion: "+"\n");
+		bw.flush();
+		datos[3] =br.readLine();
+		bw.write("Observaciones: "+"\n");
+		bw.flush();
+		datos[4] =br.readLine();
 			
 		return datos;
 	}
@@ -279,6 +292,16 @@ public class Menu {
 	        	 Estudiante nodo = new Estudiante(datos[0],datos[1],datos[2],datos[3],datos[4],datos[5]);
 	        	 addNodeAtEnd(nodo);
 	         }
+	         archivo = new File ("d:/Proyectos.txt");
+	         fr = new FileReader (archivo);
+	         br = new BufferedReader(fr);
+	         String linea1;
+	         while((linea1=br.readLine())!=null)
+	         {
+	        	 String datos [] = linea.split(",");
+	        	 Proyectos st = new Proyectos(datos[0],datos[1],datos[2],datos[3],datos[4]);
+	        	 que.enqueue(st);
+	         }
 	     		
 	      }
 	      catch(Exception e){
@@ -293,7 +316,49 @@ public class Menu {
 	         }
 	      }
 	}
-
+	public static int  terminar()
+	{
+		FileWriter fichero = null;
+        PrintWriter pw = null;
+        try
+        {
+            fichero = new FileWriter("d:/BD.txt");
+            pw = new PrintWriter(fichero);
+        	System.out.println("tama;o "+ getSize());
+    		Estudiante temp = head;
+			while(temp.getNext()!=null)
+			{
+				temp = temp.getNext();
+				pw.println(temp.getId()+","+temp.getNombre()+","+temp.getCedula()+","+temp.getCarrera()+
+						","+temp.getJornada()+","+temp.getSemestre());
+			}
+        			
+			fichero = new FileWriter("d:/Proyectos.txt");
+            pw = new PrintWriter(fichero);
+            if (que == null)
+			{
+			
+			}else
+			{
+				Proyectos temp2 =front.getNext();
+				while(temp2!=null)
+				{
+					pw.println(temp.toString());
+					temp=temp.getNext();
+				}
+			}
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+           try {
+           if (null != fichero)
+              fichero.close();
+           } catch (Exception e2) {
+              e2.printStackTrace();
+           }
+        }
+        return 0;
+	}
 	public static int getSize() 
 	{
 		int cont=0;
@@ -751,50 +816,50 @@ public class Menu {
 				case 1:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getJornada().equals("mañana"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 2:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getJornada().equals("tarde"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 3:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getJornada().equals("noche"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 			}
 				break;
@@ -814,98 +879,98 @@ public class Menu {
 				case 1:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getCarrera().equals("sistemas"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 2:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getCarrera().equals("informatica"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 3:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getCarrera().equals("idiomas"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 4:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getCarrera().equals("redes"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 5:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getCarrera().equals("licenciado deportes"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 6:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getCarrera().equals("finanzas"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 			}
 				break;
@@ -929,162 +994,162 @@ public class Menu {
 				case 1:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("primero"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 2:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("segundo"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 3:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("tercero"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 4:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("cuarto"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 5:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("quinto"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 6:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("sexto"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 7:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("septimo"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 8:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("octavo"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 9:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("noveno"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 				case 10:
 					for(int j=1;j<=getSize();j++)
 					{	
-						if (que == null)
+						if (stack == null)
 						{
-						que= new Queue ();
+							stack= new Stack ();
 						}
 						if(temp.getSemestre().equals("decimo"))
 						{
-							que.enqueue(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
+							stack.push(new Estudiante (temp.getId(),temp.getNombre(),temp.getCedula(),
 									temp.getCarrera(),temp.getJornada(),temp.getSemestre()));
 						}
 						temp = temp.getNext();
 					}
-					que.doNotPrint();
+					stack.doNotPrint();
 					break;
 			}
 				break;

@@ -10,15 +10,12 @@ public class Queue {
 	public void enqueue (Estudiante element)
 	{
 		Estudiante temp = front;
-		if(front == null )
-		{
-			front = element;
-		}
 		while(temp.getNext()!=null)
 		{
 			temp = temp.getNext();
 		}
 		temp.setNext(element);
+		element.setNext(null);
 	}
 	
 	public Estudiante dequeue()
@@ -27,7 +24,6 @@ public class Queue {
 		front.setNext(front.getNext().getNext());
 		return temp;
 	}
-	
 	public boolean isEmpty()
 	{
 		if(front.getNext()==null)
@@ -42,10 +38,10 @@ public class Queue {
 		Estudiante temp=front.getNext();
 		while(temp!=null)
 		{
-			System.out.println(temp.getId());
+			System.out.println(temp.toString());
+			temp= temp.getNext();
 		}
 		
 	}
-	
 }
 
